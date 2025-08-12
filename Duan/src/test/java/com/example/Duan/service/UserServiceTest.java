@@ -17,16 +17,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import  static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @Slf4j
+@TestPropertySource("/test.properties")
 public class UserServiceTest {
 
     @Autowired
@@ -89,12 +93,33 @@ public class UserServiceTest {
         //when(userRepository.save(any())).thenReturn(user);
 
         //WHEN
-      var exception = assertThrows(AppException.class, () -> userService.createUser(request));
+          var exception = assertThrows(AppException.class, () -> userService.createUser(request));
 
         //THEN
         Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(1002);
 
     }
+    @Test
+    @WithMockUser(username = "join")
+    void getMyInfo_valid_success(){
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
+        var response = userService.getMyInfo();
+
+        Assertions.assertThat(response.getUsername()).isEqualTo("join");
+        Assertions.assertThat(response.getId()).isEqualTo("c5b3f6a7");
+
+    }
+    @Test
+    @WithMockUser(username = "join")
+    void getMyInfo_userNotFound_error(){
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.ofNullable(null));
+
+        var exception = assertThrows(AppException.class,
+                () -> userService.getMyInfo());
+
+        Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(1005);
+
+    }
 
 }
