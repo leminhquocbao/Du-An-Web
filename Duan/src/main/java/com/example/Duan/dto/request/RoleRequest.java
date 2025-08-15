@@ -1,9 +1,9 @@
 package com.example.Duan.dto.request;
 
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @Builder
@@ -14,5 +14,4 @@ public class RoleRequest {
     String name;
     String description;
     Set<String> permission;
-
 }

@@ -1,5 +1,9 @@
 package com.example.Duan.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.Duan.dto.request.PermissionRequest;
 import com.example.Duan.dto.response.PermissionResponse;
 import com.example.Duan.entity.Permission;
@@ -9,9 +13,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,16 +23,18 @@ public class PermisionService {
     PermisionResponsitory permisionResponsitory;
     PermissionMapper permissionMapper;
 
-  public PermissionResponse create(PermissionRequest request){
+    public PermissionResponse create(PermissionRequest request) {
         Permission permission = permissionMapper.toPermission(request);
         permission = permisionResponsitory.save(permission);
-        return  permissionMapper.toPermissionReponse(permission);
+        return permissionMapper.toPermissionReponse(permission);
     }
-   public List<PermissionResponse> getAll(){
+
+    public List<PermissionResponse> getAll() {
         var permissions = permisionResponsitory.findAll();
         return permissions.stream().map(permissionMapper::toPermissionReponse).toList();
     }
-   public void delete(String permission){
+
+    public void delete(String permission) {
         permisionResponsitory.deleteById(permission);
     }
 }

@@ -1,11 +1,11 @@
 package com.example.Duan.dto.request;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import com.example.Duan.validator.DobConstraint;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder
@@ -14,12 +14,12 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
 
-   String password;
-   String firstName;
-   String lastName;
+    String password;
+    String firstName;
+    String lastName;
 
-   @DobConstraint(min = 2,message = "INVALID_DOB")
-   LocalDate dob;
-   List<String> roles;
+    @DobConstraint(min = 2, message = "INVALID_DOB")
+    LocalDate dob;
 
+    List<String> roles;
 }
